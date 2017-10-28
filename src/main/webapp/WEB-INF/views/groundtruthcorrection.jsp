@@ -4,11 +4,23 @@
     <t:head>
         <title>Ground Truth Correction</title>
 
-        <t:body>
-            <form action="Edit" method="post">
-                <input type="text" id="gtcDir" name="gtcDir" />
-                <button type="submit">Go</button>
-            </form>
-        </t:body>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#loadProject").click(function() {
+                    $.get( "ajax/content", { "gtcDir" : $("#gtcDir").val() } )
+                    .done(function( data ) {
+                        //TODO: Display project content on page
+                    })
+                    .fail(function( data ) {
+                        //TODO: Error handling
+                    });
+                });
+            });
+        </script>
     </t:head>
+
+    <t:body>
+        <input type="text" id="gtcDir" name="gtcDir" value="${gtcDir}" />
+        <button id="loadProject" type="submit">Load project</button>
+    </t:body>
 </t:html>
