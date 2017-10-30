@@ -10,6 +10,25 @@ body {
   font-family: AndronScriptorWeb;
 }
 
+/* General page layout */
+#setup {
+  margin: 15px;
+}
+#setup input {
+  width: 40%;
+}
+#wrapper {
+  display: flex;
+  overflow: overlay;
+  height: calc(100vh - 59px);
+  border-top: 5px solid #eee;
+
+}
+#content, #settings {
+  padding-left: 15px;
+  overflow: auto;
+}
+
 /* Line list display settings */
 #lineList {
   list-style: none;
@@ -21,8 +40,30 @@ body {
 #lineList img {
   height: 35px;
 }
-#lineList input {
+#lineList span, #lineList input {
   font-size: 28px;
-  display: block;
-  width: 100%;
+  display: inline-block;
+  white-space: nowrap;
+}
+#lineList span {
+  padding-left: 2px;
+}
+
+/* Split bar */
+.gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+.gutter.gutter-horizontal {
+  background-image: url('grips/vertical.png');
+  cursor: ew-resize;
+}
+.gutter.gutter-vertical {
+  background-image: url('grips/horizontal.png');
+  cursor: ns-resize;
+}
+.split.split-horizontal, .gutter.gutter-horizontal {
+  height: 100%;
+  float: left;
 }

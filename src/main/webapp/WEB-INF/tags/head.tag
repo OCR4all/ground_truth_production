@@ -8,8 +8,9 @@
     <!-- Custom CSS -->
     <link type="text/css" rel="stylesheet" href="resources/css/gtc-general.css"  media="screen"/>
 
-    <!-- jQuery -->
+    <!-- jQuery and plugins -->
     <script type="text/javascript" src="resources/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="resources/js/split.min.js"></script>
 
     <jsp:doBody />
 </head>
