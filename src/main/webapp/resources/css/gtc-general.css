@@ -1,5 +1,8 @@
 /* Font settings */
-@font-face { font-family: AndronScriptorWeb; src: url('resources/fonts/AndronScriptorWeb.ttf'); } 
+@font-face {
+  font-family: AndronScriptorWeb;
+  src: url('../fonts/AndronScriptorWeb.ttf') format('truetype');
+} 
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
