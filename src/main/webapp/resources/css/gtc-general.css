@@ -9,3 +9,20 @@ body {
 .asw-font {
   font-family: AndronScriptorWeb;
 }
+
+/* Line list display settings */
+#lineList {
+  list-style: none;
+  padding: 0;
+}
+#lineList li {
+  margin-bottom: 25px;
+}
+#lineList img {
+  height: 35px;
+}
+#lineList input {
+  font-size: 28px;
+  display: block;
+  width: 100%;
+}
