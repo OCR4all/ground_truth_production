@@ -4,6 +4,7 @@
 
     <title>Ground Truth Correction</title>
 
+    <link type="text/css" rel="stylesheet" href="resources/css/normalize.css"  media="screen"/>
     <!-- Custom CSS -->
     <link type="text/css" rel="stylesheet" href="resources/css/gtc-general.css"  media="screen"/>
 
