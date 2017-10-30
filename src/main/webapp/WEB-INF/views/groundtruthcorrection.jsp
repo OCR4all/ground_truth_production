@@ -43,6 +43,17 @@
 
                 // Load project intially
                 $("#loadProject").click();
+
+                $(function () {
+                    var options = {
+                        float: true,
+                        disableResize: true,
+                        cellHeight: 40,
+                        cellWidth: 40,
+                        verticalMargin: 5,
+                    };
+                    $('.grid-stack').gridstack(options);
+                });
             });
         </script>
     </t:head>
@@ -55,7 +66,28 @@
 
         <div id="wrapper">
             <div id="content"><ul id="lineList"></ul></div>
-            <div id="settings"></div>
+            <div id="settings">
+                <div class="grid-stack">
+                    <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="1" data-gs-height="1">
+                        <div class="grid-stack-item-content"></div>
+                    </div>
+                    <div class="grid-stack-item" data-gs-x="1" data-gs-y="0" data-gs-width="1" data-gs-height="1">
+                        <div class="grid-stack-item-content"></div>
+                    </div>
+                    <div class="grid-stack-item" data-gs-x="2" data-gs-y="0" data-gs-width="1" data-gs-height="1">
+                        <div class="grid-stack-item-content"></div>
+                    </div>
+                    <div class="grid-stack-item" data-gs-x="1" data-gs-y="1" data-gs-width="1" data-gs-height="1">
+                        <div class="grid-stack-item-content"></div>
+                    </div>
+                    <div class="grid-stack-item" data-gs-x="3" data-gs-y="1" data-gs-width="1" data-gs-height="1">
+                        <div class="grid-stack-item-content"></div>
+                    </div>
+                    <div class="grid-stack-item" data-gs-x="2" data-gs-y="3" data-gs-width="1" data-gs-height="1">
+                        <div class="grid-stack-item-content"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </t:body>
 </t:html>

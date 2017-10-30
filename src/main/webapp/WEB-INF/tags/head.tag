@@ -4,13 +4,22 @@
 
     <title>Ground Truth Correction</title>
 
+    <!-- Normalize CSS for better consistency across browsers  -->
     <link type="text/css" rel="stylesheet" href="resources/css/normalize.css"  media="screen"/>
+    <!-- Gridstack CSS part -->
+    <link type="text/css" rel="stylesheet" href="resources/css/gridstack.min.css"  media="screen"/>
     <!-- Custom CSS -->
     <link type="text/css" rel="stylesheet" href="resources/css/gtc-general.css"  media="screen"/>
 
-    <!-- jQuery and plugins -->
+    <!-- jQuery -->
     <script type="text/javascript" src="resources/js/jquery-3.2.1.min.js"></script>
+    <!-- Split and resize page contents -->
     <script type="text/javascript" src="resources/js/split.min.js"></script>
+    <!-- Grid for virtual keyboard -->
+    <script type="text/javascript" src="resources/js/underscore.min.js"></script>
+    <script type="text/javascript" src="resources/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="resources/js/gridstack.min.js"></script>
+    <script type="text/javascript" src="resources/js/gridstack.jQueryUI.min.js"></script>
 
     <jsp:doBody />
 </head>
