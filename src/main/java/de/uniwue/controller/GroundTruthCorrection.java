@@ -1,5 +1,9 @@
 package de.uniwue.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -9,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import de.uniwue.helper.ContentLoader;
+import de.uniwue.model.LineData;
+
 /**
  * Controller class for the Ground Truth page
+ * Use response.setStatus to trigger AJAX fail (and therefore show errors)
  */
 @Controller
 public class GroundTruthCorrection {
@@ -41,15 +49,19 @@ public class GroundTruthCorrection {
      * @return tbd
      */
     @RequestMapping(value = "/ajax/content" , method = RequestMethod.GET)
-    public @ResponseBody String jsonOverview(
+    public @ResponseBody ArrayList<LineData> jsonOverview(
                 @RequestParam("gtcDir") String gtcDir,
-                HttpSession session
+                HttpSession session, HttpServletResponse response
             ) {
         // Store gtc directory in session (serves as entry point)
         session.setAttribute("gtcDir", gtcDir);
 
-        //TODO: Load project and return its content accordingly
-
-        return "";
+        ContentLoader cl = new ContentLoader(gtcDir);
+        try {
+            return cl.getContent();
+        } catch (IOException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
     }
 }
