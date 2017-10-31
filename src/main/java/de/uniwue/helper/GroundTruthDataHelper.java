@@ -10,9 +10,9 @@ import java.util.TreeMap;
 import de.uniwue.model.LineData;
 
 /**
- * Helper class for content loading
+ * Helper class to load Ground Truth data
  */
-public class ContentLoader {
+public class GroundTruthDataHelper {
     /**
      * Path to the content directory (gtc directory)
      */
@@ -21,14 +21,14 @@ public class ContentLoader {
     /**
      * Stores the content of all files (sorted) in the gtc directory
      */
-    private TreeMap<String, LineData> content = new TreeMap<String, LineData>();
+    private TreeMap<String, LineData> gtData = new TreeMap<String, LineData>();
 
     /**
      * Constructor
      *
      * @param path Path to the content directory
      */
-    public ContentLoader(String path) {
+    public GroundTruthDataHelper(String path) {
         this.path = path;
     }
 
@@ -37,12 +37,12 @@ public class ContentLoader {
      *
      * @throws IOException 
      */
-    private void loadContent() throws IOException {
+    private void loadGroundTruthData() throws IOException {
         final File contentDir = new File(path);
         if (!contentDir.exists()) 
             return;
 
-        content = new TreeMap<String, LineData>();
+        gtData = new TreeMap<String, LineData>();
         for (final File fileEntry : contentDir.listFiles()) {
             if (fileEntry.isFile()) {
                 String fileName = fileEntry.getName();
@@ -53,11 +53,11 @@ public class ContentLoader {
                     break;
 
                 String lineId = fileName.substring(0 , extensionStart);
-                if (!content.containsKey(lineId)) {
-                    content.put(lineId, new LineData(lineId));
+                if (!gtData.containsKey(lineId)) {
+                    gtData.put(lineId, new LineData(lineId));
                 }
 
-                LineData lineData = content.get(lineId);
+                LineData lineData = gtData.get(lineId);
                 // Set appropriate line data for each file type
                 if (fileName.endsWith("nrm.png")) {
                     lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
@@ -79,10 +79,10 @@ public class ContentLoader {
      * @return Array that holds all line data
      * @throws IOException
      */
-    public ArrayList<LineData> getContent() throws IOException {
-        if (content.isEmpty())
-            loadContent();
+    public ArrayList<LineData> getGroundTruthData() throws IOException {
+        if (gtData.isEmpty())
+            loadGroundTruthData();
 
-        return new ArrayList<LineData>(content.values());
+        return new ArrayList<LineData>(gtData.values());
     }
 }

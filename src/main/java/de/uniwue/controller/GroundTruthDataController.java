@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import de.uniwue.helper.ContentLoader;
+import de.uniwue.helper.GroundTruthDataHelper;
 import de.uniwue.model.LineData;
 
 /**
@@ -21,15 +21,16 @@ import de.uniwue.model.LineData;
  * Use response.setStatus to trigger AJAX fail (and therefore show errors)
  */
 @Controller
-public class GroundTruthCorrection {
+public class GroundTruthDataController {
     /**
      * Response to the request to send the content of the project root
      *
      * @param gtcDir Directory to the necessary ground truth files
+     * @param session Session of the user
      * @return Returns the content of the /groundtruthcorrection page
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView showMessage(
+    public ModelAndView displayGroundTruthCorrectionPage(
                 @RequestParam(value = "gtcDir", required = false) String gtcDir,
                 HttpSession session
             ) {
@@ -46,19 +47,21 @@ public class GroundTruthCorrection {
      * This folder should contain lines that are represented as image and text
      *
      * @param gtcDir Directory to the necessary ground truth files
-     * @return tbd
+     * @param session Session of the user
+     * @param response Response to the request
+     * @return Ground Truth data (image, Ground Truth, Ground Truth correction)
      */
-    @RequestMapping(value = "/ajax/content" , method = RequestMethod.GET)
-    public @ResponseBody ArrayList<LineData> jsonOverview(
+    @RequestMapping(value = "/ajax/groundtruthdata" , method = RequestMethod.GET)
+    public @ResponseBody ArrayList<LineData> jsonGroundTruthData(
                 @RequestParam("gtcDir") String gtcDir,
                 HttpSession session, HttpServletResponse response
             ) {
         // Store gtc directory in session (serves as entry point)
         session.setAttribute("gtcDir", gtcDir);
 
-        ContentLoader cl = new ContentLoader(gtcDir);
+        GroundTruthDataHelper cl = new GroundTruthDataHelper(gtcDir);
         try {
-            return cl.getContent();
+            return cl.getGroundTruthData();
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
