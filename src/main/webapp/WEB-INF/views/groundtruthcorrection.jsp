@@ -6,12 +6,9 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
-                // Fetch and display Ground Truth data via AJAX
-                $("#loadProject").click(function() {
-                    if( $("#gtcDir").val() === "" )
-                        return;
-
-                    $.get( "ajax/content", { "gtcDir" : $("#gtcDir").val() } )
+                // Function to load and display the Ground Truth data (left side of the page)
+                function loadGroundTruthData() {
+                    $.get( "ajax/groundtruthdata", { "gtcDir" : $("#gtcDir").val() } )
                     .done(function( data ) {
                         var maxWidth = 0;
                         $.each(data, function(index, lineData) {
@@ -39,6 +36,39 @@
                     .fail(function( data ) {
                         //TODO: Error handling
                     });
+                }
+
+                // Function to load and display the virtual keyboard (right side of the page)
+                function loadVirtualKeyboard() {
+                    $.get( "ajax/virtualkeyboard/load", { "keyType" : "complete" } )
+                    .done(function( data ) {
+                        if( data === null) {
+                            //TODO: Error handling
+                            return;
+                        }
+
+                        var grid = $('.grid-stack').data('gridstack');
+                        // Clear grid before loading all items
+                        grid.removeAll();
+                        $.each(data, function(index, item) {
+                            grid.addWidget(
+                                $('<div><div class="grid-stack-item-content"><span class="asw-font">'  + item.content + '</span></div><div/>'),
+                                item.x, item.y, item.width, item.height
+                            );
+                        });
+                    })
+                    .fail(function( data ) {
+                        //TODO: Error handling
+                    });
+                }
+
+                // Fetch and display page contents via AJAX
+                $("#loadProject").click(function() {
+                    if( $("#gtcDir").val() === "" )
+                        return;
+
+                    loadGroundTruthData();
+                    loadVirtualKeyboard();
                 });
                 // Load project intially
                 $("#loadProject").click();
@@ -61,16 +91,14 @@
                 });
 
                 // Cutsomizeable grid for virtual keyboard
-                $(function () {
-                    var options = {
-                        float: true,
-                        disableResize: true,
-                        cellHeight: 40,
-                        cellWidth: 40,
-                        verticalMargin: 5,
-                    };
-                    $('.grid-stack').gridstack(options);
-                });
+                var options = {
+                    float: true,
+                    disableResize: true,
+                    cellHeight: 40,
+                    cellWidth: 40,
+                    verticalMargin: 5,
+                };
+                $('.grid-stack').gridstack(options);
                 // Lock/Unlock Grid
                 $('#lockGrid').click(function() {
                     var grid = $('.grid-stack').data('gridstack');
@@ -98,28 +126,7 @@
 
         <div id="wrapper">
             <div id="content"><ul id="lineList"></ul></div>
-            <div id="settings">
-                <div class="grid-stack">
-                    <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="1" data-gs-height="1">
-                        <div class="grid-stack-item-content"></div>
-                    </div>
-                    <div class="grid-stack-item" data-gs-x="1" data-gs-y="0" data-gs-width="1" data-gs-height="1">
-                        <div class="grid-stack-item-content"></div>
-                    </div>
-                    <div class="grid-stack-item" data-gs-x="2" data-gs-y="0" data-gs-width="1" data-gs-height="1">
-                        <div class="grid-stack-item-content"></div>
-                    </div>
-                    <div class="grid-stack-item" data-gs-x="1" data-gs-y="1" data-gs-width="1" data-gs-height="1">
-                        <div class="grid-stack-item-content"></div>
-                    </div>
-                    <div class="grid-stack-item" data-gs-x="3" data-gs-y="1" data-gs-width="1" data-gs-height="1">
-                        <div class="grid-stack-item-content"></div>
-                    </div>
-                    <div class="grid-stack-item" data-gs-x="2" data-gs-y="3" data-gs-width="1" data-gs-height="1">
-                        <div class="grid-stack-item-content"></div>
-                    </div>
-                </div>
-            </div>
+            <div id="settings"><div class="grid-stack"></div></div>
         </div>
     </t:body>
 </t:html>

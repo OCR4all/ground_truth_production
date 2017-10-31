@@ -91,6 +91,11 @@ body {
   background-color: #d3d3d3;
   border: 1px solid #808080;
 }
+.grid-stack-item-content span {
+  font-size: 20px;
+  display: inline-block;
+  padding-top: 8px;
+}
 .grid-stack .grid-stack-item .grid-stack-item-content,
 .grid-stack .grid-stack-item .placeholder-content {
     left: 3px;
