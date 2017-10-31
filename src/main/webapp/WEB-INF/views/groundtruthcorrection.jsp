@@ -6,9 +6,7 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
-                // Split page in two parts
-                Split(['#content', '#settings'], {sizes: [60, 40] });
-
+                // Fetch and display Ground Truth data via AJAX
                 $("#loadProject").click(function() {
                     if( $("#gtcDir").val() === "" )
                         return;
@@ -22,13 +20,15 @@
                                 gtcText = lineData.groundTruth;
 
                             var li = '<li id="' + lineData.id + '">';
+                            li    += '<span class="lineId">' + lineData.id + '</span><br />';
                             li    += '<img src="data:image/jpeg;base64, ' + lineData.image + '" /><br />';
                             li    += '<span class="asw-font">' + lineData.groundTruth + '</span><br />';
                             li    += '<input type="text" class="asw-font" value="' + gtcText + '" />';
                             li    += '</li>';
                             $('#lineList').append(li);
 
-                            var textWidth = $('#lineList li').last().find('span').width();
+                            // Update max text width
+                            var textWidth = $('#lineList li').last().find('span').last().width();
                             if( textWidth > maxWidth)
                                 maxWidth = textWidth;
                         });
@@ -40,10 +40,27 @@
                         //TODO: Error handling
                     });
                 });
-
                 // Load project intially
                 $("#loadProject").click();
 
+                // Split page in two parts
+                var split = Split(['#content', '#settings'], {
+                    sizes: [ 60, 40 ],
+                    minSize: [ 200, 470 ],
+                });
+                // Collapse/Open virtual keyboard on gutter double click
+                $('.gutter').dblclick(function() {
+                   if( $('#settings').is(':visible') ) {
+                       $('#settings').hide();
+                       split.collapse(1);
+                   }
+                   else {
+                       $('#settings').show();
+                       split.setSizes( [60, 40] );
+                   }
+                });
+
+                // Cutsomizeable grid for virtual keyboard
                 $(function () {
                     var options = {
                         float: true,
@@ -54,14 +71,29 @@
                     };
                     $('.grid-stack').gridstack(options);
                 });
+                // Lock/Unlock Grid
+                $('#lockGrid').click(function() {
+                    var grid = $('.grid-stack').data('gridstack');
+                    grid.enableMove(false);
+                });
+                $('#unlockGrid').click(function() {
+                    var grid = $('.grid-stack').data('gridstack');
+                    grid.enableMove(true);
+                });
             });
         </script>
     </t:head>
 
     <t:body>
         <div id="setup">
-            Ground Truth directory path: <input type="text" id="gtcDir" name="gtcDir" value="${gtcDir}" />
-            <button id="loadProject" type="submit">Load</button>
+            <div id="pathSetting">
+                Ground Truth directory path: <input type="text" id="gtcDir" name="gtcDir" value="${gtcDir}" />
+                <button id="loadProject" type="submit">Load</button>
+            </div>
+            <div id="gridSetting">
+                <button id="lockGrid" type="submit">Lock</button>
+                <button id="unlockGrid" type="submit">Unlock</button>
+            </div>
         </div>
 
         <div id="wrapper">

@@ -14,8 +14,16 @@ body {
 #setup {
   margin: 15px;
 }
-#setup input {
-  width: 40%;
+#pathSetting {
+  width: 60%;
+  display: inline-block;
+}
+#pathSetting input {
+  width: 60%;
+}
+#gridSetting {
+  display: inline-block;
+  float: right;
 }
 #wrapper {
   display: flex;
@@ -51,6 +59,10 @@ body {
 }
 #lineList span {
   padding-left: 2px;
+}
+#lineList .lineId {
+  font-size: 16px;
+  font-style: italic;
 }
 
 /* Split bar */
