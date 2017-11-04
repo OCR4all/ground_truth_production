@@ -83,6 +83,20 @@
                 });
 
                 // Import/Export virtual keyboard configuration
+                function virtualKeyboardKeys(grid) {
+                    // Fetch data of all keys
+                    var keys = [];
+                    $.each($(grid).find('.grid-stack-item'), function(index, el) {
+                        keys.push({
+                            'x':       $(this).attr('data-gs-x'),
+                            'y':       $(this).attr('data-gs-y'),
+                            'width':   $(this).attr('data-gs-width'),
+                            'height':  $(this).attr('data-gs-height'),
+                            'content': $(this).text(),
+                        });
+                    });
+                    return keys;
+                }
                 $('#configFile').on('change', function() {
                     var fileList = this.files;
                     if( fileList === undefined || fileList.length !== 1 ) {
@@ -109,6 +123,17 @@
                             // Update virtual keyboard
                             var grid = $('.grid-stack').data('gridstack');
                             updateGrid(grid, json);
+                            // Save current settings to session (to keep them on page reload)
+                            $.ajax({
+                                url: 'ajax/virtualkeyboard/savecomplete',
+                                type: 'post',
+                                data: JSON.stringify(json),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                dataType: 'json',
+                            });
                         });
                     };
                     // Load the file
@@ -119,16 +144,8 @@
                 });
                 $('#exportConfig').click(function() {
                     // Fetch data of all keys
-                    var keys = [];
-                    $.each($('.grid-stack-item'), function(index, el) {
-                        keys.push({
-                            'x':       $(this).attr('data-gs-x'),
-                            'y':       $(this).attr('data-gs-y'),
-                            'width':   $(this).attr('data-gs-width'),
-                            'height':  $(this).attr('data-gs-height'),
-                            'content': $(this).text(),
-                        });
-                    });
+                    var grid = $('.grid-stack').data('gridstack');
+                    var keys = virtualKeyboardKeys(grid);
 
                     // Create temporary download element (needs to be <a>)
                     var downloadEl   = document.createElement("a");

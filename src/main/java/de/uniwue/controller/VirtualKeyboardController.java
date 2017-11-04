@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,5 +78,30 @@ public class VirtualKeyboardController {
         session.setAttribute("vkConf", vkConf);
 
         return gridstack;
+    }
+
+    /**
+     * Updates the virtual keyboard configuration of type "complete" in the session
+     *
+     * @param virtualKeyboardConfig Key data structure according to serialization requirements of gridstack.js
+     * @param session Session of the user
+     * @param response Response to the request
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/ajax/virtualkeyboard/savecomplete" , method = RequestMethod.POST)
+    public @ResponseBody void jsonSaveVirtualKeyboard(
+                @RequestBody ArrayList<HashMap<String, Object>> virtualKeyboardConfig,
+                HttpSession session, HttpServletResponse response
+            ) {
+        HashMap<String, ArrayList<HashMap<String, Object>>> vkConf =
+                (HashMap<String, ArrayList<HashMap<String, Object>>>) session.getAttribute("vkConf");
+        if (vkConf != null && !vkConf.isEmpty()) {
+            // Update Virtual Keyboard of type "complete" 
+            vkConf.put("complete", virtualKeyboardConfig);
+        }
+        else {
+            // Session variable should always exist (due to initial loading)
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
