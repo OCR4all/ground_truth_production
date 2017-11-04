@@ -52,7 +52,7 @@
                         grid.removeAll();
                         $.each(data, function(index, item) {
                             grid.addWidget(
-                                $('<div><div class="grid-stack-item-content"><span class="asw-font">'  + item.content + '</span></div><div/>'),
+                                $('<div><div class="grid-stack-item-content"><button class="asw-font">'  + item.content + '</button></div><div/>'),
                                 item.x, item.y, item.width, item.height
                             );
                         });
@@ -61,17 +61,6 @@
                         //TODO: Error handling
                     });
                 }
-
-                // Fetch and display page contents via AJAX
-                $("#loadProject").click(function() {
-                    if( $("#gtcDir").val() === "" )
-                        return;
-
-                    loadGroundTruthData();
-                    loadVirtualKeyboard();
-                });
-                // Load project intially
-                $("#loadProject").click();
 
                 // Split page in two parts
                 var split = Split(['#content', '#settings'], {
@@ -97,17 +86,38 @@
                     cellHeight: 40,
                     cellWidth: 40,
                     verticalMargin: 5,
+                    disableDrag: true,
                 };
                 $('.grid-stack').gridstack(options);
                 // Lock/Unlock Grid
                 $('#lockGrid').click(function() {
+                    $.each($('.grid-stack span'), function(index, el) {
+                        var content = $(el).html();
+                        $(el).replaceWith('<button class="asw-font">' + content + '</button>');
+                    });
                     var grid = $('.grid-stack').data('gridstack');
                     grid.enableMove(false);
                 });
                 $('#unlockGrid').click(function() {
+                    $.each($('.grid-stack button'), function(index, el) {
+                        var content = $(el).html();
+                        $(el).replaceWith('<span class="asw-font">' + content + '</span>');
+                    });
                     var grid = $('.grid-stack').data('gridstack');
                     grid.enableMove(true);
                 });
+                // Load keyboard
+                loadVirtualKeyboard();
+
+                // Fetch and display page contents via AJAX
+                $("#loadProject").click(function() {
+                    if( $("#gtcDir").val() === "" )
+                        return;
+
+                    loadGroundTruthData();
+                });
+                // Load project intially
+                $("#loadProject").click();
             });
         </script>
     </t:head>
