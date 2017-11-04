@@ -21,8 +21,16 @@ body {
 #pathSetting input {
   width: 60%;
 }
-#gridSetting {
+#keyboardSetting {
+  width: 40%;
   display: inline-block;
+  float: right;
+}
+#configSetting {
+  float: right;
+}
+#gridSetting {
+  padding-left: 15px;
   float: right;
 }
 #wrapper {

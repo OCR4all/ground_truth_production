@@ -38,6 +38,16 @@
                     });
                 }
 
+                function updateGrid(grid, itemData) {
+                    // Clear grid before loading all items
+                    grid.removeAll();
+                    $.each(itemData, function(index, item) {
+                        grid.addWidget(
+                            $('<div><div class="grid-stack-item-content"><button class="asw-font">'  + item.content + '</button></div><div/>'),
+                            item.x, item.y, item.width, item.height
+                        );
+                    });
+                }
                 // Function to load and display the virtual keyboard (right side of the page)
                 function loadVirtualKeyboard() {
                     $.get( "ajax/virtualkeyboard/load", { "keyType" : "complete" } )
@@ -48,14 +58,7 @@
                         }
 
                         var grid = $('.grid-stack').data('gridstack');
-                        // Clear grid before loading all items
-                        grid.removeAll();
-                        $.each(data, function(index, item) {
-                            grid.addWidget(
-                                $('<div><div class="grid-stack-item-content"><button class="asw-font">'  + item.content + '</button></div><div/>'),
-                                item.x, item.y, item.width, item.height
-                            );
-                        });
+                        updateGrid(grid, data);
                     })
                     .fail(function( data ) {
                         //TODO: Error handling
@@ -77,6 +80,64 @@
                        $('#settings').show();
                        split.setSizes( [60, 40] );
                    }
+                });
+
+                // Import/Export virtual keyboard configuration
+                $('#configFile').on('change', function() {
+                    var fileList = this.files;
+                    if( fileList === undefined || fileList.length !== 1 ) {
+                        //TODO: Error handling
+                        return;
+                    }
+
+                    var configFile = fileList[0];
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        if( e.target === undefined || e.target.result === "" ) {
+                            //TODO: Error handling
+                            return;
+                        }
+
+                        // Read JSON file 
+                        jQuery.when(jQuery.getJSON(e.target.result))
+                        .done(function(json) {
+                            if( json === undefined ) {
+                                //TODO: Error handling
+                                return;
+                            }
+
+                            // Update virtual keyboard
+                            var grid = $('.grid-stack').data('gridstack');
+                            updateGrid(grid, json);
+                        });
+                    };
+                    // Load the file
+                    reader.readAsDataURL(configFile);
+                });
+                $('#importConfig').click(function() {
+                    $('#configFile').click();
+                });
+                $('#exportConfig').click(function() {
+                    // Fetch data of all keys
+                    var keys = [];
+                    $.each($('.grid-stack-item'), function(index, el) {
+                        keys.push({
+                            'x':       $(this).attr('data-gs-x'),
+                            'y':       $(this).attr('data-gs-y'),
+                            'width':   $(this).attr('data-gs-width'),
+                            'height':  $(this).attr('data-gs-height'),
+                            'content': $(this).text(),
+                        });
+                    });
+
+                    // Create temporary download element (needs to be <a>)
+                    var downloadEl   = document.createElement("a");
+                    downloadEl.href = 'data:application/json;charset=utf-8,' + JSON.stringify(keys);
+                    downloadEl.download = 'virtualKeyboardConfig.json';
+                    document.body.appendChild(downloadEl);
+                    // Start download and remove temporary element
+                    downloadEl.click();
+                    document.body.removeChild(downloadEl);
                 });
 
                 // Click behavior for virtual keyboard buttons
@@ -112,16 +173,6 @@
                     $(lastInput).prop('selectionEnd', lastPosition);
                 });
 
-                // Cutsomizeable grid for virtual keyboard
-                var options = {
-                    float: true,
-                    disableResize: true,
-                    cellHeight: 40,
-                    cellWidth: 40,
-                    verticalMargin: 5,
-                    disableDrag: true,
-                };
-                $('.grid-stack').gridstack(options);
                 // Lock/Unlock Grid
                 $('#lockGrid').click(function() {
                     $.each($('.grid-stack span'), function(index, el) {
@@ -139,6 +190,17 @@
                     var grid = $('.grid-stack').data('gridstack');
                     grid.enableMove(true);
                 });
+
+                // Cutsomizeable grid for virtual keyboard
+                var options = {
+                    float: true,
+                    disableResize: true,
+                    cellHeight: 40,
+                    cellWidth: 40,
+                    verticalMargin: 5,
+                    disableDrag: true,
+                };
+                $('.grid-stack').gridstack(options);
                 // Load keyboard
                 loadVirtualKeyboard();
 
@@ -161,9 +223,16 @@
                 Ground Truth directory path: <input type="text" id="gtcDir" name="gtcDir" value="${gtcDir}" />
                 <button id="loadProject" type="submit">Load</button>
             </div>
-            <div id="gridSetting">
-                <button id="lockGrid" type="submit">Lock</button>
-                <button id="unlockGrid" type="submit">Unlock</button>
+            <div id="keyboardSetting">
+                <div id="gridSetting">Grid:
+                    <button id="lockGrid" type="submit">Lock</button>
+                    <button id="unlockGrid" type="submit">Unlock</button>
+                </div>
+                <div id="configSetting">Config:
+                    <input id="configFile" name="configFile" type="file" style="display: none;" />
+                    <button id="importConfig" type="submit">Import</button>
+                    <button id="exportConfig" type="submit">Export</button>
+                </div>
             </div>
         </div>
 
