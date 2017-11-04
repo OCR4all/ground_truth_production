@@ -46,9 +46,8 @@ public class VirtualKeyboardController {
             }
         }
         else {
-            // Initialize vkConf session variable if it does not exist
-            session.setAttribute("vkConf", new HashMap<String, ArrayList<HashMap<String, Object>>>());
-            vkConf = (HashMap<String, ArrayList<HashMap<String, Object>>>) session.getAttribute("vkConf");
+            // Initialize vkConf variable if it does not exist in session
+            vkConf = new HashMap<String, ArrayList<HashMap<String, Object>>>();
         }
 
         VirtualKeyboardHelper vk = new VirtualKeyboardHelper();
@@ -74,7 +73,8 @@ public class VirtualKeyboardController {
         }
 
         // Update session with loaded configuration
-        session.setAttribute("vkConf", vkConf.put(keyType, gridstack));
+        vkConf.put(keyType, gridstack);
+        session.setAttribute("vkConf", vkConf);
 
         return gridstack;
     }
