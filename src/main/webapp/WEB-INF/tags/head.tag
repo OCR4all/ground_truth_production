@@ -20,6 +20,8 @@
     <script type="text/javascript" src="resources/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="resources/js/gridstack.min.js"></script>
     <script type="text/javascript" src="resources/js/gridstack.jQueryUI.min.js"></script>
+    <!-- Custom JS -->
+    <script type="text/javascript" src="resources/js/gtc-virtualkeyboard.js"></script>
 
     <jsp:doBody />
 </head>
