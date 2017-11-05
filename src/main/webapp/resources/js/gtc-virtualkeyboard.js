@@ -48,14 +48,14 @@ function initializeVirtualKeyboard(gridContainer, keyType) {
     };
     $(gridContainer).gridstack(options);
 
-    grid = $(gridContainer).data('gridstack');
+    var grid = $(gridContainer).data('gridstack');
     // Load keyboard
     loadVirtualKeyboard(grid, keyType);
 }
 
 
 $(document).ready(function() {
-    // Import/Export virtual keyboard configuration
+    // Get virtual keyboard configuration
     function virtualKeyboardKeys() {
         // Fetch data of all keys
         var keys = [];
@@ -70,6 +70,33 @@ $(document).ready(function() {
         });
         return keys;
     }
+
+    // Save virtual keyboard to session
+    function saveVirtualKeyboard(grid, jsonConf) {
+        // Save current settings to session (to keep them on page reload)
+        $.ajax({
+            url: 'ajax/virtualkeyboard/savecomplete',
+            type: 'post',
+            data: JSON.stringify(jsonConf),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            dataType: 'json',
+        });
+    }
+    // Removes virtual keyboard from session and reload it
+    function resetVirtualKeyboard(grid) {
+        $.post('ajax/virtualkeyboard/reset')
+        .done(function() {
+            loadVirtualKeyboard(grid, "complete");
+        })
+        .fail(function() {
+            //TODO: Error handling
+        });
+    }
+
+    // Import/Export virtual keyboard configuration
     $('#configFile').on('change', function() {
         var fileList = this.files;
         if( fileList === undefined || fileList.length !== 1 ) {
@@ -93,20 +120,10 @@ $(document).ready(function() {
                     return;
                 }
 
-                // Update virtual keyboard
+                // Update and save virtual keyboard
                 var grid = $('.grid-stack').data('gridstack');
-                updateGrid(grid, json);
-                // Save current settings to session (to keep them on page reload)
-                $.ajax({
-                    url: 'ajax/virtualkeyboard/savecomplete',
-                    type: 'post',
-                    data: JSON.stringify(json),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    dataType: 'json',
-                });
+                updateGrid(grid, jsonConf);
+                saveVirtualKeyboard(grid, json);
             });
         };
         // Load the file
@@ -179,5 +196,17 @@ $(document).ready(function() {
         });
         var grid = $('.grid-stack').data('gridstack');
         grid.enableMove(true);
+    });
+
+    // Save/Reset Grid
+    $('#saveGrid').click(function() {
+        // Save virtual keyboard to session
+        var grid = $('.grid-stack').data('gridstack');
+        saveVirtualKeyboard(grid, virtualKeyboardKeys());
+    });
+    $('#resetGrid').click(function() {
+        // Reset virtual keyboard
+        var grid = $('.grid-stack').data('gridstack');
+        resetVirtualKeyboard(grid);
     });
 });

@@ -13,17 +13,17 @@ body {
 /* General page layout */
 #setup {
   margin: 15px;
+  display: inline-block;
+  width: calc(100vw - 30px);
 }
 #pathSetting {
-  width: 60%;
-  display: inline-block;
+  width: 50%;
+  float:left;
 }
 #pathSetting input {
-  width: 60%;
+  width: 50%;
 }
 #keyboardSetting {
-  width: 40%;
-  display: inline-block;
   float: right;
 }
 #configSetting {

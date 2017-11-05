@@ -104,4 +104,14 @@ public class VirtualKeyboardController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Resets the virtual keyboard configuration in the session
+     *
+     * @param session Session of the user
+     */
+    @RequestMapping(value = "/ajax/virtualkeyboard/reset" , method = RequestMethod.POST)
+    public @ResponseBody void jsonSaveVirtualKeyboard(HttpSession session) {
+        session.removeAttribute("vkConf");
+    }
 }

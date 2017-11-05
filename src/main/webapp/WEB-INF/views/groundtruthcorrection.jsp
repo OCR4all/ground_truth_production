@@ -81,6 +81,8 @@
                 <div id="gridSetting">Grid:
                     <button id="lockGrid" type="submit">Lock</button>
                     <button id="unlockGrid" type="submit">Unlock</button>
+                    <button id="saveGrid" type="submit">Save</button>
+                    <button id="resetGrid" type="submit">Reset</button>
                 </div>
                 <div id="configSetting">Config:
                     <input id="configFile" name="configFile" type="file" style="display: none;" />
