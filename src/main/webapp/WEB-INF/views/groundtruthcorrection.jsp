@@ -8,7 +8,7 @@
             $(document).ready(function() {
                 // Function to load and display the Ground Truth data (left side of the page)
                 function loadGroundTruthData() {
-                    $.get( "ajax/groundtruthdata", { "gtcDir" : $("#gtcDir").val() } )
+                    $.get( "ajax/groundtruthdata/load", { "gtcDir" : $("#gtcDir").val() } )
                     .done(function( data ) {
                         var maxWidth = 0;
                         $.each(data, function(index, lineData) {

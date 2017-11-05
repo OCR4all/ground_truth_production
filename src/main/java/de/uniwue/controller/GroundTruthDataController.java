@@ -51,8 +51,8 @@ public class GroundTruthDataController {
      * @param response Response to the request
      * @return Ground Truth data (image, Ground Truth, Ground Truth correction)
      */
-    @RequestMapping(value = "/ajax/groundtruthdata" , method = RequestMethod.GET)
-    public @ResponseBody ArrayList<LineData> jsonGroundTruthData(
+    @RequestMapping(value = "/ajax/groundtruthdata/load" , method = RequestMethod.GET)
+    public @ResponseBody ArrayList<LineData> jsonloadGroundTruthData(
                 @RequestParam("gtcDir") String gtcDir,
                 HttpSession session, HttpServletResponse response
             ) {
