@@ -1,12 +1,14 @@
 package de.uniwue.helper;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.TreeMap;
-
 import de.uniwue.model.LineData;
 
 /**
@@ -84,5 +86,19 @@ public class GroundTruthDataHelper {
             loadGroundTruthData();
 
         return new ArrayList<LineData>(gtData.values());
+    }
+
+    /**
+     * Saves the groundTruthData correction
+     * @param id Id of the groundTruthData
+     * @param gtcText corrected groundTruthData text 
+     */
+    public void saveGroundTruthData(String id, String gtcText) throws IOException {
+        Path pathToFile = Paths.get(path+File.separator+id+".txt");
+        //Use try-with-resource to get auto-closeable writer instance
+        try (BufferedWriter writer = Files.newBufferedWriter(pathToFile))
+        {
+            writer.write(gtcText);
+        }    
     }
 }

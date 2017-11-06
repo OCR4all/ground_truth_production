@@ -20,7 +20,7 @@
                             li    += '<span class="lineId">' + lineData.id + '</span><br />';
                             li    += '<img src="data:image/jpeg;base64, ' + lineData.image + '" /><br />';
                             li    += '<span class="asw-font">' + lineData.groundTruth + '</span><br />';
-                            li    += '<input type="text" class="asw-font" value="' + gtcText + '" />';
+                            li    += '<input type="text" data-id="' + lineData.id + '" class="asw-font" value="' + gtcText + '" />';
                             li    += '</li>';
                             $('#lineList').append(li);
 
@@ -36,6 +36,10 @@
                     .fail(function( data ) {
                         //TODO: Error handling
                     });
+                }
+
+                function saveGroundTruthData(gtcID,gtcText) {
+                    $.get( "ajax/groundtruthdata/save", { "gtcID" : gtcID, "gtcText" : gtcText } )
                 }
 
                 // Split page in two parts
@@ -67,6 +71,10 @@
                 });
                 // Load project intially
                 $("#loadProject").click();
+
+                $('#lineList').on('focusout', 'input', function(event) {
+                    saveGroundTruthData($(this).attr('data-id'),encodeURIComponent($(this).val()));
+                });
             });
         </script>
     </t:head>
