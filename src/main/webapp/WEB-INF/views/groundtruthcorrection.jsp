@@ -6,11 +6,21 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
+                // Set width of GTC input field to the width of its mirror span element + a static buffer
+                function adjustGTCInputWidth(inputEl) {
+                    $(inputEl).width($(inputEl).prev().width() + 40);
+                }
+
+                // Adjust content of GTC input mirror span and adjust the input width accordingly 
+                $('#lineList').on('keyup keypress blur change', 'input', function(event) {
+                    $(this).prev().text($(this).val());
+                    adjustGTCInputWidth(this);
+                });
+
                 // Function to load and display the Ground Truth data (left side of the page)
                 function loadGroundTruthData() {
                     $.get( "ajax/groundtruthdata/load", { "gtcDir" : $("#gtcDir").val() } )
                     .done(function( data ) {
-                        var maxWidth = 0;
                         $.each(data, function(index, lineData) {
                             var gtcText = lineData.groundTruthCorrection;
                             if( gtcText === null )
@@ -19,19 +29,15 @@
                             var li = '<li id="' + lineData.id + '">';
                             li    += '<span class="lineId">' + lineData.id + '</span><br />';
                             li    += '<img src="data:image/jpeg;base64, ' + lineData.image + '" /><br />';
-                            li    += '<span class="asw-font">' + lineData.groundTruth + '</span><br />';
+                            li    += '<span class="asw-font" data-content="gt">' + lineData.groundTruth + '</span><br />';
+                            li    += '<span class="asw-font" data-content="gtc" style="display: none;">' + gtcText + '</span>'
                             li    += '<input type="text" data-id="' + lineData.id + '" class="asw-font" value="' + gtcText + '" />';
                             li    += '</li>';
                             $('#lineList').append(li);
 
-                            // Update max text width
-                            var textWidth = $('#lineList li').last().find('span').last().width();
-                            if( textWidth > maxWidth)
-                                maxWidth = textWidth;
+                            // Adjust input width to width of its mirror span element
+                            adjustGTCInputWidth($('#lineList li').last().find('input').last());
                         });
-
-                        // Set width of all input fields to widest span + static buffer
-                        $('#lineList input').width(maxWidth + 40);
                     })
                     .fail(function( data ) {
                         //TODO: Error handling
