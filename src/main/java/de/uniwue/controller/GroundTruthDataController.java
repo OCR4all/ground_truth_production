@@ -1,6 +1,8 @@
 package de.uniwue.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
@@ -51,8 +53,8 @@ public class GroundTruthDataController {
      * @param response Response to the request
      * @return Ground Truth data (image, Ground Truth, Ground Truth correction)
      */
-    @RequestMapping(value = "/ajax/groundtruthdata" , method = RequestMethod.GET)
-    public @ResponseBody ArrayList<LineData> jsonGroundTruthData(
+    @RequestMapping(value = "/ajax/groundtruthdata/load" , method = RequestMethod.GET)
+    public @ResponseBody ArrayList<LineData> jsonloadGroundTruthData(
                 @RequestParam("gtcDir") String gtcDir,
                 HttpSession session, HttpServletResponse response
             ) {
@@ -65,6 +67,26 @@ public class GroundTruthDataController {
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
+        }
+    }
+
+    /**
+     * Response to the request to save the Ground Truth Data
+     *
+     * @param session Session of the user
+     * @param response Response to the request
+     */
+    @RequestMapping(value = "/ajax/groundtruthdata/save" , method = RequestMethod.GET)
+    public @ResponseBody void jsonsaveGroundTruthData(
+            @RequestParam("gtcID") String gtcID, @RequestParam("gtcText") String gtcText,
+                HttpSession session, HttpServletResponse response
+            ) {
+        String gtcDir = (String) session.getAttribute("gtcDir");
+        GroundTruthDataHelper cl = new GroundTruthDataHelper(gtcDir);
+        try {
+            cl.saveGroundTruthData(gtcID, URLDecoder.decode(gtcText, StandardCharsets.UTF_8.toString()));
+        } catch (IOException f) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }
