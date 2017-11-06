@@ -151,15 +151,14 @@ $(document).ready(function() {
     // If the user has a focused input field allow key usage
     var lastInput = null;
     var lastPosition = 0;
-    $('#lineList').on('click', 'input', function() {
-        lastInput = this;
-        lastPosition = $(this).prop('selectionStart');
-    });
     $('#lineList').on('focusout', 'input', function(event) {
         var newFocus = event.relatedTarget;
         // Virtual keyboard button is pressed
-        if( newFocus != null && $(newFocus).parents('.grid-stack').length === 1 )
+        if( newFocus != null && $(newFocus).parents('.grid-stack').length === 1 ) {
+            lastInput = this;
+            lastPosition = $(this).prop('selectionStart');
             return;
+        }
 
         // Any other element was clicked/selected, so reset last input
         lastInput = null;
@@ -174,10 +173,10 @@ $(document).ready(function() {
         var newText = oldText.substr(0, lastPosition) + $(this).text() + oldText.substr(lastPosition);
         $(lastInput).val(newText);
         // Focus input and set cursor position after new character
-        $(lastInput).focus();
-        lastPosition = lastPosition + 2;
+        lastPosition = lastPosition + $(this).text().length;
         $(lastInput).prop('selectionStart', lastPosition);
         $(lastInput).prop('selectionEnd', lastPosition);
+        $(lastInput).focus();
     });
 
     // Lock/Unlock Grid
