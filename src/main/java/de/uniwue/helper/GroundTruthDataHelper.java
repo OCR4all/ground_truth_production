@@ -46,30 +46,30 @@ public class GroundTruthDataHelper {
 
         gtData = new TreeMap<String, LineData>();
         for (final File fileEntry : contentDir.listFiles()) {
-            if (fileEntry.isFile()) {
-                String fileName = fileEntry.getName();
+            if (!fileEntry.isFile())
+                continue;
 
-                int extensionStart = fileName.indexOf(".");
-                // Skip files that do not have any file ending
-                if (extensionStart == -1 || extensionStart == 0)
-                    break;
+            String fileName    = fileEntry.getName();
+            int extensionStart = fileName.indexOf(".");
+            // Skip files that do not have any file ending
+            if (extensionStart == -1 || extensionStart == 0)
+                continue;
 
-                String lineId = fileName.substring(0 , extensionStart);
-                if (!gtData.containsKey(lineId)) {
-                    gtData.put(lineId, new LineData(lineId));
-                }
+            String lineId = fileName.substring(0 , extensionStart);
+            if (!gtData.containsKey(lineId)) {
+                gtData.put(lineId, new LineData(lineId));
+            }
 
-                LineData lineData = gtData.get(lineId);
-                // Set appropriate line data for each file type
-                if (fileName.endsWith("nrm.png")) {
-                    lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
-                }
-                else if (fileName.endsWith(".gt.txt")) {
-                    lineData.setGroundTruth(Files.lines(fileEntry.toPath()).findFirst().get());
-                }
-                else if (fileName.endsWith(".txt")) {
-                    lineData.setGroundTruthCorrection(Files.lines(fileEntry.toPath()).findFirst().get());
-                }
+            LineData lineData = gtData.get(lineId);
+            // Set appropriate line data for each file type
+            if (fileName.endsWith("nrm.png")) {
+                lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
+            }
+            else if (fileName.endsWith(".gt.txt")) {
+                lineData.setGroundTruth(Files.lines(fileEntry.toPath()).findFirst().orElse(""));
+            }
+            else if (fileName.endsWith(".txt")) {
+                lineData.setGroundTruthCorrection(Files.lines(fileEntry.toPath()).findAny().orElse(""));
             }
         }
     }
