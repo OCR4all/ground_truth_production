@@ -175,7 +175,7 @@ $(document).ready(function() {
         $(lastInput).val(newText);
         // Focus input and set cursor position after new character
         $(lastInput).focus();
-        lastPosition++;
+        lastPosition = lastPosition + 2;
         $(lastInput).prop('selectionStart', lastPosition);
         $(lastInput).prop('selectionEnd', lastPosition);
     });
