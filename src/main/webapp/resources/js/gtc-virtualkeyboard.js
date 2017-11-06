@@ -150,19 +150,22 @@ $(document).ready(function() {
     // Click behavior for virtual keyboard buttons
     // If the user has a focused input field allow key usage
     var lastInput = null;
-    var lastPosition = 0;
+    var lastPositionStart = 0;
+    var lastPositionEnd   = 0;
     $('#lineList').on('focusout', 'input', function(event) {
         var newFocus = event.relatedTarget;
         // Virtual keyboard button is pressed
         if( newFocus != null && $(newFocus).parents('.grid-stack').length === 1 ) {
             lastInput = this;
-            lastPosition = $(this).prop('selectionStart');
+            lastPositionStart = $(this).prop('selectionStart');
+            lastPositionEnd   = $(this).prop('selectionEnd');
             return;
         }
 
         // Any other element was clicked/selected, so reset last input
         lastInput = null;
-        lastPosition = 0;
+        lastPositionStart = 0;
+        lastPositionEnd   = 0;
     });
     $('.grid-stack').on('click', 'button', function() {
         if( lastInput == null )
@@ -170,12 +173,12 @@ $(document).ready(function() {
 
         // Insert clicked character to last input field at last position
         var oldText = $(lastInput).val();
-        var newText = oldText.substr(0, lastPosition) + $(this).text() + oldText.substr(lastPosition);
+        var newText = oldText.substr(0, lastPositionStart) + $(this).text() + oldText.substr(lastPositionEnd);
         $(lastInput).val(newText);
-        // Focus input and set cursor position after new character
-        lastPosition = lastPosition + $(this).text().length;
-        $(lastInput).prop('selectionStart', lastPosition);
-        $(lastInput).prop('selectionEnd', lastPosition);
+        // Focus input and set cursor position behind new character
+        lastPositionStart = lastPositionEnd = lastPositionStart + $(this).text().length;
+        $(lastInput).prop('selectionStart', lastPositionStart);
+        $(lastInput).prop('selectionEnd', lastPositionEnd);
         $(lastInput).focus();
     });
 
