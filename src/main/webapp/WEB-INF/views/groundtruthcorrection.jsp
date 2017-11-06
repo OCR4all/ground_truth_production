@@ -38,9 +38,16 @@
                     });
                 }
 
-                function saveGroundTruthData(gtcID,gtcText) {
-                    $.get( "ajax/groundtruthdata/save", { "gtcID" : gtcID, "gtcText" : gtcText } )
-                }
+                // Save Ground Truth data when input field changes
+                $('#lineList').on('focusout', 'input', function(event) {
+                    $.post("ajax/groundtruthdata/save", {
+                        "gtcLineId" : $(this).attr('data-id'),
+                        "gtcText"   : encodeURIComponent($(this).val()) 
+                    })
+                    .fail(function( data ) {
+                        //TODO: Error handling
+                    });
+                });
 
                 // Split page in two parts
                 var split = Split(['#content', '#settings'], {
@@ -71,10 +78,6 @@
                 });
                 // Load project intially
                 $("#loadProject").click();
-
-                $('#lineList').on('focusout', 'input', function(event) {
-                    saveGroundTruthData($(this).attr('data-id'),encodeURIComponent($(this).val()));
-                });
             });
         </script>
     </t:head>

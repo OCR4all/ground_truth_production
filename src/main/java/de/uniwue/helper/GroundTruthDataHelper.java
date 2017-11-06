@@ -90,15 +90,14 @@ public class GroundTruthDataHelper {
 
     /**
      * Saves the groundTruthData correction
-     * @param id Id of the groundTruthData
-     * @param gtcText corrected groundTruthData text 
+     *
+     * @param lineId Ground Truth line Id
+     * @param gtcText Corrected Ground Truth text
      */
-    public void saveGroundTruthData(String id, String gtcText) throws IOException {
-        Path pathToFile = Paths.get(path+File.separator+id+".txt");
-        //Use try-with-resource to get auto-closeable writer instance
-        try (BufferedWriter writer = Files.newBufferedWriter(pathToFile))
-        {
-            writer.write(gtcText);
-        }    
+    public void saveGroundTruthData(String lineId, String gtcText) throws IOException {
+        Path pathToFile = Paths.get(path + File.separator + lineId + ".txt");
+        BufferedWriter writer = Files.newBufferedWriter(pathToFile);
+        writer.write(gtcText);
+        writer.close();
     }
 }
