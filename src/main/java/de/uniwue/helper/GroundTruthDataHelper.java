@@ -62,14 +62,14 @@ public class GroundTruthDataHelper {
 
             LineData lineData = gtData.get(lineId);
             // Set appropriate line data for each file type
-            if (fileName.endsWith("nrm.png")) {
+            if (fileName.endsWith(".nrm.png")) {
                 lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
             }
             else if (fileName.endsWith(".gt.txt")) {
-                lineData.setGroundTruth(Files.lines(fileEntry.toPath()).findFirst().orElse(""));
+                lineData.setGroundTruthCorrection(Files.lines(fileEntry.toPath()).findFirst().orElse(""));
             }
             else if (fileName.endsWith(".txt")) {
-                lineData.setGroundTruthCorrection(Files.lines(fileEntry.toPath()).findAny().orElse(""));
+                lineData.setGroundTruth(Files.lines(fileEntry.toPath()).findFirst().orElse(""));
             }
         }
     }
@@ -95,7 +95,7 @@ public class GroundTruthDataHelper {
      * @param gtcText Corrected Ground Truth text
      */
     public void saveGroundTruthData(String lineId, String gtcText) throws IOException {
-        Path pathToFile = Paths.get(path + File.separator + lineId + ".txt");
+        Path pathToFile = Paths.get(path + File.separator + lineId + ".gt.txt");
         BufferedWriter writer = Files.newBufferedWriter(pathToFile);
         writer.write(gtcText);
         writer.close();
