@@ -21,6 +21,7 @@
                 function loadGroundTruthData() {
                     $.get( "ajax/groundtruthdata/load", { "gtcDir" : $("#gtcDir").val() } )
                     .done(function( data ) {
+                        $('#lineList').empty();
                         $.each(data, function(index, lineData) {
                             var gtcText = lineData.groundTruthCorrection;
                             var gtcClass = "";
