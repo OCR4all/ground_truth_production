@@ -23,15 +23,21 @@
                     .done(function( data ) {
                         $.each(data, function(index, lineData) {
                             var gtcText = lineData.groundTruthCorrection;
-                            if( gtcText === null )
+                            var gtcClass = "";
+                            if( gtcText === null ) {
                                 gtcText = lineData.groundTruth;
+                            }
+                            else {
+                                gtcClass = "has-gtc-text";
+                                console.log("here");
+                            }
 
                             var li = '<li id="' + lineData.id + '">';
                             li    += '<span class="lineId">' + lineData.id + '</span><br />';
-                            li    += '<img src="data:image/jpeg;base64, ' + lineData.image + '" /><br />';
-                            li    += '<span class="asw-font" data-content="gt">' + lineData.groundTruth + '</span><br />';
+                            li    += '<img src="data:image/jpeg;base64, ' + lineData.image + '" />';
+                            li    += '<span class="asw-font" data-content="gt"  style="display: none;">' + lineData.groundTruth + '</span><br />';
                             li    += '<span class="asw-font" data-content="gtc" style="display: none;">' + gtcText + '</span>'
-                            li    += '<input type="text" data-id="' + lineData.id + '" class="asw-font" value="' + gtcText + '" />';
+                            li    += '<input type="text" data-id="' + lineData.id + '" class="asw-font ' + gtcClass + '" value="' + gtcText + '" />';
                             li    += '</li>';
                             $('#lineList').append(li);
 
@@ -91,7 +97,7 @@
     <t:body>
         <div id="setup">
             <div id="pathSetting">
-                Ground Truth directory path: <input type="text" id="gtcDir" name="gtcDir" value="${gtcDir}" />
+                Directory Path: <input type="text" id="gtcDir" name="gtcDir" value="${gtcDir}" />
                 <button id="loadProject" type="submit">Load</button>
             </div>
             <div id="keyboardSetting">

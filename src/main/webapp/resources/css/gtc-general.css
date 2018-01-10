@@ -72,6 +72,18 @@ body {
   font-size: 16px;
   font-style: italic;
 }
+#lineList .has-gtc-text {
+  background-color: lightgreen;
+}
+#lineList input[type="text"] {
+  outline: none !important;
+  border:2px solid black;
+  color: black;
+}
+#lineList input[type="text"]:focus {
+  outline: none !important;
+  border:2px solid red;
+}
 
 /* Split bar */
 .gutter {
