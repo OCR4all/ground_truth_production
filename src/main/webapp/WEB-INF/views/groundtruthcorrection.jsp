@@ -30,7 +30,6 @@
                             }
                             else {
                                 gtcClass = "has-gtc-text";
-                                console.log("here");
                             }
 
                             var li = '<li id="' + lineData.id + '">';
@@ -53,9 +52,18 @@
 
                 // Save Ground Truth data when input field changes
                 $('#lineList').on('focusout', 'input', function(event) {
+                    var input = this;
+                    var gtText = $(input).parent().find('span[data-content="gt"]').text();
+                    // If there is no change, do not save correction file
+                    if( gtText == $(input).val() && !$(input).hasClass("has-gtc-text") )
+                        return;
+
                     $.post("ajax/groundtruthdata/save", {
-                        "gtcLineId" : $(this).attr('data-id'),
-                        "gtcText"   : encodeURIComponent($(this).val()) 
+                        "gtcLineId" : $(input).attr('data-id'),
+                        "gtcText"   : encodeURIComponent($(input).val()) 
+                    })
+                    .done(function( data ) {
+                        $(input).addClass("has-gtc-text");
                     })
                     .fail(function( data ) {
                         //TODO: Error handling
