@@ -45,6 +45,9 @@ function initializeVirtualKeyboard(gridContainer, keyType) {
         cellWidth: 40,
         verticalMargin: 5,
         disableDrag: true,
+        removable: '.trash',
+        removeTimeout: 100,
+        acceptWidgets: '.grid-stack-item'
     };
     $(gridContainer).gridstack(options);
 
@@ -184,6 +187,7 @@ $(document).ready(function() {
 
     // Lock/Unlock Grid
     $('#lockGrid').click(function() {
+        $('#removeWidget').hide();
         $.each($('.grid-stack span'), function(index, el) {
             var content = $(el).html();
             $(el).replaceWith('<button class="asw-font">' + content + '</button>');
@@ -192,6 +196,7 @@ $(document).ready(function() {
         grid.enableMove(false);
     });
     $('#unlockGrid').click(function() {
+        $('#removeWidget').show();
         $.each($('.grid-stack button'), function(index, el) {
             var content = $(el).html();
             $(el).replaceWith('<span class="asw-font">' + content + '</span>');

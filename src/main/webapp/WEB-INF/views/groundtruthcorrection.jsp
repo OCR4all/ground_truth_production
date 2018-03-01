@@ -121,7 +121,10 @@
 
         <div id="wrapper">
             <div id="content"><ul id="lineList"></ul></div>
-            <div id="settings"><div class="grid-stack"></div></div>
+            <div id="settings">
+                <div id="removeWidget" class="trash ui-droppable"></div>
+                <div class="grid-stack"></div>
+            </div>
         </div>
     </t:body>
 </t:html>
