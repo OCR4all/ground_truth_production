@@ -123,6 +123,7 @@
             <div id="content"><ul id="lineList"></ul></div>
             <div id="settings">
                 <div id="addWidget">
+                    <a href="#addWidgetModal" rel="modal:open"></a>
                     <span class="left">Click to add new button</span>
                     <span class="right">Click to add new button</span>
                 </div>
@@ -132,6 +133,15 @@
                 </div>
                 <div class="grid-stack"></div>
             </div>
+        </div>
+
+        <div id="addWidgetModal" class="modal">
+            <h2>Adding new button</h2>
+            <span>Enter character:</span><br />
+            <input type="text" id="newWidgetChar" name="newWidgetChar" value="" maxlength="1" size="1" class="asw-font" />
+            <p class="error-text">Please enter a character to continue!</p>
+            <br /><br />
+            <button id="addWidgetToGrid">Add to grid</button>
         </div>
     </t:body>
 </t:html>

@@ -53,6 +53,10 @@ body {
 .right {
   float: right;
 }
+.error-text {
+  display: none;
+  color: red;
+}
 /* Line list display settings */
 #lineList {
   list-style: none;
@@ -110,6 +114,7 @@ body {
 
 /* Virtual keyboard (grid) */
 #removeWidget {
+  position: relative;
   display: none;
   height: 30px;
   margin: 0px 3px 10px 3px;
@@ -121,12 +126,18 @@ body {
   padding: 6px;
 }
 #addWidget {
+  position: relative;
   display: none;
   height: 30px;
   margin: 0px 3px 10px 3px;
   background: #d6f5d6 center center url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAADv0lEQVRYhcWXz2tcVRTHP+dmhhdhJtOaVabQhYKCaTLJTGMbrfC6sSgSaARRNwn9A9pFN4pCU1C6EaH9A0KyERXaQhAxqwm0trb5PWnELlQQOl2V6WRGmseb3ONi7iQhTSeTn343b+Ce977fe+eec75HaBB+1o+U4qV3gLPW2A5jTVJFkwCikrfG5o01C8DNeCl+a+L0RKWR78pWAR25jsPRMPo5cA5obVDvE2A4jIZXFjoXCjsS4HZ8QUW/AA4DCtwTlTFRuRtGw3ysHHsMUI6V26JhNKmivSraB5xw3y6IytfxUvzqi05kUwFds12HjDU/AO8CFhgRlcvTx6f/2XrzkJnKHFXRS8AgYIBxa+zHc91zT7cU0DPZ88qKWfkZeB3Iqegns+nZ3xsh3ojUXKq9aaXpO6ATeNhkm96f7Jn864UC3M5/c+TXK5HKQC6V+3cn5DW0L7bHvGVvBPgQeGiNPbn+JFYF+Fk/stSy9BNwBrg+k575CMHuhnwViknPpH90IsZbllo+qN0JU4spxUsXHPl8JVIZ2DNyAMEGzcEgkAPOFBPF82tLQO+d3pcDL/gTaFHRjkb/8/R0WgFmMjNbpjOs3okcUAyj4asLnQsFAxB4wWfAIWBkpxeuEcx3zS8Co0CttmD8rB+hWmRUVC7vF3kNojJEtaac87N+xLjy2grcazTPdwPHcR9oLcfKpwxw1ikb22/ydRgDUNF+Y43tcALuHhS7seaOE3DMGGuSAGE0zB+UAOCxeyYjtZZaaywbUUu1eqgXs1mKeoGXf/bSM4Aj5vlXDhYRUcmr6GvlWLkNKG0MqFdktluIagi8IOl+PjLW2DxANIwm67yz12hzz7xxNgoV7T0odmvsWwCi8sAAN52AvoMSAPQ5ATdMvBS/RdXDnchMZY7uN7PjeBN4EivHbhvXl4ergvTSfgtQ0SGqXXh44vRExQCE0fAKUAAGu2e639gv8tRcqh0YAAqOc80RZaYyF1X0GyAXNAdvL7YvlveS3FmzX4FOFb04m579FtY5ongpfhUYBzq9ZW8EZe+KlGK8ZW+Uqjn9JVFMXKst1TWlQXMwuNuTcDsfBfqBP0Tl5PTx6eKmAuB5W77StPKpczLbxkZbXolU3sulcn+vj6k3mHxP1aRaYFRUhrY5mAxRvXDbG0xq8LN+pJgonheVL1kbze4DY66fP/YCLw+rtb3NVbg+qnkuQEFFv0oUE9e2NZqtx/82nG6En/Uj5Vj5lIr2q+gxIAkcccuPgLyoPBCVG7Fy7Haj4/l/nymwRuNBQdUAAAAASUVORK5CYII=') no-repeat;
   background-size: 20px 20px;
   cursor: pointer;
+}
+#addWidget a {
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 #addWidget span {
   color: #32cd32;
@@ -158,4 +169,9 @@ body {
 .grid-stack .grid-stack-item .placeholder-content {
   left: 3px;
   right: 3px;
+}
+/* Modal */
+#addWidgetModal input {
+  font-size: 28px;
+  text-align: center;
 }

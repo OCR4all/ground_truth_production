@@ -8,11 +8,15 @@
     <link type="text/css" rel="stylesheet" href="resources/css/normalize.css"  media="screen"/>
     <!-- Gridstack CSS part -->
     <link type="text/css" rel="stylesheet" href="resources/css/gridstack.min.css"  media="screen"/>
+    <!-- jQuery Modal -->
+    <link type="text/css" rel="stylesheet" href="resources/css/jquery.modal.min.css"  media="screen"/>
     <!-- Custom CSS -->
     <link type="text/css" rel="stylesheet" href="resources/css/gtc-general.css"  media="screen"/>
 
     <!-- jQuery -->
     <script type="text/javascript" src="resources/js/jquery-3.2.1.min.js"></script>
+    <!-- jQuery Modal -->
+    <script type="text/javascript" src="resources/js/jquery.modal.min.js"></script>
     <!-- Split and resize page contents -->
     <script type="text/javascript" src="resources/js/split.min.js"></script>
     <!-- Grid for virtual keyboard -->

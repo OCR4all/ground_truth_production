@@ -18,6 +18,7 @@ function updateGrid(grid, itemData) {
             item.x, item.y, item.width, item.height
         );
     });
+    $('#removeWidget, #addWidget').hide();
 }
 
 // Function to load and display the virtual keyboard (into grid-stack container)
@@ -187,7 +188,7 @@ $(document).ready(function() {
 
     // Lock/Unlock Grid
     $('#lockGrid').click(function() {
-        $('#removeWidget').hide();
+        $('#removeWidget, #addWidget').hide();
         $.each($('.grid-stack span'), function(index, el) {
             var content = $(el).html();
             $(el).replaceWith('<button class="asw-font">' + content + '</button>');
@@ -196,7 +197,7 @@ $(document).ready(function() {
         grid.enableMove(false);
     });
     $('#unlockGrid').click(function() {
-        $('#removeWidget').show();
+        $('#removeWidget, #addWidget').show();
         $.each($('.grid-stack button'), function(index, el) {
             var content = $(el).html();
             $(el).replaceWith('<span class="asw-font">' + content + '</span>');
@@ -215,5 +216,24 @@ $(document).ready(function() {
         // Reset virtual keyboard
         var grid = $('.grid-stack').data('gridstack');
         resetVirtualKeyboard(grid);
+    });
+
+    // Add new widget to Grid
+    $('#addWidgetToGrid').click(function() {
+        $('#addWidgetModal .error-text').hide();
+        var newChar = $('#newWidgetChar').val();
+        if( newChar.length === 0 ) {
+            $('#addWidgetModal .error-text').show();
+            return;
+        }
+
+        var grid = $('.grid-stack').data('gridstack');
+        grid.addWidget(
+            $('<div><div class="grid-stack-item-content"><span class="asw-font">'  + newChar + '</span></div><div/>'),
+            0, 0, 1, 1, true // Automatically add widget to first free position
+        );
+        grid.movable($( ".grid-stack-item-content:contains('" + newChar + "')" ).parent('div'), true);
+        $('#newWidgetChar').val('');
+        $.modal.close();
     });
 });
