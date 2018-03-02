@@ -107,7 +107,7 @@
             <div id="keyboardSetting">
                 <div id="gridSetting">Grid:
                     <button id="lockGrid" type="submit">Lock</button>
-                    <button id="unlockGrid" type="submit">Unlock</button>
+                    <button id="unlockGrid" type="submit">Edit</button>
                     <button id="saveGrid" type="submit">Save</button>
                     <button id="resetGrid" type="submit">Reset</button>
                 </div>
@@ -122,7 +122,14 @@
         <div id="wrapper">
             <div id="content"><ul id="lineList"></ul></div>
             <div id="settings">
-                <div id="removeWidget" class="trash ui-droppable"></div>
+                <div id="addWidget">
+                    <span class="left">Click to add new button</span>
+                    <span class="right">Click to add new button</span>
+                </div>
+                <div id="removeWidget" class="trash ui-droppable">
+                    <span class="left">Drag button to delete</span>
+                    <span class="right">Drag button to delete</span>
+                </div>
                 <div class="grid-stack"></div>
             </div>
         </div>
