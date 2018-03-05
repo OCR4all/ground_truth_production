@@ -1,5 +1,6 @@
 package de.uniwue.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +53,14 @@ public class VirtualKeyboardController {
         }
 
         VirtualKeyboardHelper vk = new VirtualKeyboardHelper();
-        List<List<String>> keys = vk.getKeys(keyType);
+        List<List<String>> keys;
+        try {
+	        keys = vk.getKeys(keyType);
+        } catch (UnsupportedEncodingException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+
         if (keys == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;

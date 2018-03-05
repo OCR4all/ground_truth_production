@@ -3,6 +3,7 @@ package de.uniwue.helper;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +41,13 @@ public class VirtualKeyboardHelper {
      *
      * @param fileName File name of the keyboard characters
      * @return
+     * @throws UnsupportedEncodingException 
      */
-    private List<List<String>> loadKeysFromFile(String fileName) {
+    private List<List<String>> loadKeysFromFile(String fileName) throws UnsupportedEncodingException {
         List<List<String>> keys = new ArrayList<List<String>>();
 
         InputStream is = classLoader.getResourceAsStream(fileName);
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF8"));
         br.lines().forEach(s -> {
             String[] splitStrings = s.split("\t", -1);
 
@@ -63,8 +65,9 @@ public class VirtualKeyboardHelper {
      * Get the virtual keyboard keys (complete)
      *
      * @return Keys of the virtual keyboard (complete)
+     * @throws UnsupportedEncodingException 
      */
-    private List<List<String>> getKeysComplete() {
+    private List<List<String>> getKeysComplete() throws UnsupportedEncodingException {
         if (keysComplete.isEmpty())
             keysComplete = loadKeysFromFile("virtualKeyboardComplete.txt");
         return keysComplete;
@@ -74,8 +77,9 @@ public class VirtualKeyboardHelper {
      * Get the virtual keyboard keys (frequently used ones)
      *
      * @return Keys of the virtual keyboard (frequently used ones)
+     * @throws UnsupportedEncodingException 
      */
-    private List<List<String>> getKeysFrequent() {
+    private List<List<String>> getKeysFrequent() throws UnsupportedEncodingException {
         if (keysFrequent.isEmpty())
             keysFrequent = loadKeysFromFile("virtualKeyboardFrequent.txt");
         return keysFrequent;
@@ -86,8 +90,9 @@ public class VirtualKeyboardHelper {
      *
      * @param keyType Determines which keys to get
      * @return Keys of the given type
+     * @throws UnsupportedEncodingException 
      */
-    public List<List<String>> getKeys(String keyType) {
+    public List<List<String>> getKeys(String keyType) throws UnsupportedEncodingException {
         switch(keyType) {
             case "complete": return getKeysComplete();
             case "frequent": return getKeysFrequent();
