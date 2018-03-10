@@ -64,10 +64,12 @@
 
                 // Function to load and display the Ground Truth data (left side of the page)
                 function loadGroundTruthData() {
+                    // Indicate change with clearing lines
+                    $('#lineList').empty();
+
                     var dirType = $('#dirType').val();
                     $.get( "ajax/groundtruthdata/load", { "gtcDir" : $("#gtcDir").val(), "dirType" : dirType, "pageId" : $('#pageId').val() } )
                     .done(function( data ) {
-                        $('#lineList').empty();
                         $.each(data, function(index, lineData) {
                             var gtText = lineData.groundTruth;
                             var gtcText = lineData.groundTruthCorrection;
