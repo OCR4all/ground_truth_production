@@ -13,6 +13,11 @@ public class LineData {
     private String id;
 
     /**
+     * Directory in which the files are stored
+     */
+    private String directory;
+
+    /**
      * Image of the line as Base64 string
      */
     private String image;
@@ -32,8 +37,9 @@ public class LineData {
      *
      * @param id Line Identifier
      */
-    public LineData(String id) {
+    public LineData(String id, String dir) {
         this.id = id;
+        this.directory = dir;
     }
 
     /**
@@ -52,6 +58,24 @@ public class LineData {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * Gets the directory of the line
+     *
+     * @return Line directory
+     */
+    public String getDirectory() {
+        return directory;
+    }
+
+    /**
+     * Sets the directory of the line
+     *
+     * @param directory Line directory
+     */
+    public void setDirectory(String directory) {
+        this.directory = directory;
     }
 
     /**

@@ -57,13 +57,20 @@ body {
   display: none;
   color: red;
 }
+
+/* Page selection */
+#pageSelection {
+  display: none;
+  border-bottom: 2px solid black;
+  padding: 20px 10px 20px 0px;
+}
 /* Line list display settings */
 #lineList {
   list-style: none;
   padding: 0;
 }
 #lineList li {
-  margin-bottom: 25px;
+  margin-top: 25px;
 }
 #lineList img {
   height: 35px;
