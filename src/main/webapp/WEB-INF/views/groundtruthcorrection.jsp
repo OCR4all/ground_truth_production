@@ -9,7 +9,9 @@
             $(document).ready(function() {
                 // Set width of GTC input field to the width of its mirror span element + a static buffer
                 function adjustGTCInputWidth(inputEl) {
-                    $(inputEl).width($(inputEl).prev().width() + 40);
+                    var width = $(inputEl).prev().width() + 40;
+                    if( width < 200 ) width = 400;
+                    $(inputEl).width(width);
                 }
 
                 // Load pages and update select
@@ -67,10 +69,11 @@
                     .done(function( data ) {
                         $('#lineList').empty();
                         $.each(data, function(index, lineData) {
+                            var gtText = lineData.groundTruth;
                             var gtcText = lineData.groundTruthCorrection;
                             var gtcClass = "";
                             if( gtcText === null ) {
-                                gtcText = lineData.groundTruth;
+                                gtcText = (gtText === null) ? '' : gtText;
                             }
                             else {
                                 gtcClass = "has-gtc-text";
