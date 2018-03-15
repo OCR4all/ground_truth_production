@@ -37,6 +37,17 @@
                     });
                 }
 
+                // Handle checkbox to hide/dispaly recognized text (gtText)
+                $('#gtDisplay').on('change', function() {
+                    var gtElements = $('[data-content="gt"]');
+                    if( $(gtElements).first().is(":visible") ) {
+                        $(gtElements).hide();
+                    }
+                    else {
+                        $(gtElements).css("display", "block");
+                    }
+                });
+
                 // Adjust content of GTC input mirror span and adjust the input width accordingly 
                 $('#lineList').on('keyup keypress blur change', 'input', function(event) {
                     $(this).prev().text($(this).val());
@@ -72,10 +83,14 @@
                     .done(function( data ) {
                         $.each(data, function(index, lineData) {
                             var gtText = lineData.groundTruth;
+                            if( gtText === null ) {
+                                gtText = (gtText === null) ? '' : gtText;
+                            }
+
                             var gtcText = lineData.groundTruthCorrection;
                             var gtcClass = "";
                             if( gtcText === null ) {
-                                gtcText = (gtText === null) ? '' : gtText;
+                                gtcText = gtText;
                             }
                             else {
                                 gtcClass = "has-gtc-text";
@@ -84,7 +99,7 @@
                             var li = '<li id="' + lineData.id + '">';
                             li    += '<span class="lineId">' + lineData.id + '</span><br />';
                             li    += '<img src="data:image/jpeg;base64, ' + lineData.image + '" />';
-                            li    += '<span class="asw-font" data-content="gt"  style="display: none;">' + lineData.groundTruth + '</span><br />';
+                            li    += '<span class="asw-font" data-content="gt"  style="display: none;">' + gtText + '</span><br />';
                             li    += '<span class="asw-font" data-content="gtc" style="display: none;">' + gtcText + '</span>';
                             li    += '<input type="text" data-id="' + lineData.id + '" class="asw-font ' + gtcClass + '" value="' + gtcText + '" />';
                             li    += '</li>';
@@ -97,7 +112,7 @@
                         // Directory type specific handling
                         if( dirType == "pages" ) {
                             loadPages();
-                            $('#pageSelection').show();
+                            $('#pageSelection').css("display", "inline");
                         }
                         else {
                             $('#pageSelection').hide();
@@ -189,11 +204,17 @@
 
         <div id="wrapper">
             <div id="content">
-                <div id="pageSelection">
-                    Select page:
-                    <button id="prevPage">Prev</button>
-                    <select id="pageId"><option value="null">-- select --</option></select>
-                    <button id="nextPage">Next</button>
+                <div id="viewSetting">
+                    <div id="gtDisplaySelection">
+                        Show recognized text:
+                        <input id="gtDisplay" type="checkbox" />
+                    </div>
+                    <div id="pageSelection">
+                        Select page:
+                        <button id="prevPage">Prev</button>
+                        <select id="pageId"><option value="null">-- select --</option></select>
+                        <button id="nextPage">Next</button>
+                    </div>
                 </div>
                 <ul id="lineList"></ul>
             </div>

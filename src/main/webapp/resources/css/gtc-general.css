@@ -56,12 +56,18 @@ body {
   color: red;
 }
 
-/* Page selection */
-#pageSelection {
-  display: none;
+/* View settings */
+#viewSetting {
   border-bottom: 2px solid black;
   padding: 20px 10px 20px 15px;
   background-color: #f7f7f7;
+}
+#gtDisplaySelection {
+  display: inline;
+  padding-right: 25px;
+}
+#pageSelection {
+  display: none;
 }
 /* Line list display settings */
 #lineList {
@@ -81,6 +87,9 @@ body {
 }
 #lineList span {
   padding-left: 2px;
+}
+#lineList span[data-content="gt"] {
+  padding-top: 10px;
 }
 #lineList .lineId {
   font-size: 16px;
