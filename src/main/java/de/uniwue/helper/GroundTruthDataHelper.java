@@ -110,7 +110,10 @@ public class GroundTruthDataHelper {
 
             LineData lineData = gtData.get(lineId);
             // Set appropriate line data for each file type
-            if (fileName.endsWith(".nrm.png")) {
+            if (fileName.endsWith(".bin.png")) {
+                lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
+            }
+            else if (fileName.endsWith(".nrm.png")) {
                 lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
             }
             else if (fileName.endsWith(".gt.txt")) {
