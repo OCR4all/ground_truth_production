@@ -1,5 +1,8 @@
 package de.uniwue.helper;
 
+import de.uniwue.model.LineData;
+import org.springframework.web.util.HtmlUtils;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -10,11 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.TreeMap;
-import java.util.stream.Stream;
-
-import org.springframework.web.util.HtmlUtils;
-
-import de.uniwue.model.LineData;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Helper class to load data
@@ -57,8 +56,8 @@ public class DataHelper {
      *
      * @param dataDir Directory to the necessary files
      * @param dirType Type of the data directory (flat | pages)
-     * @param pageId Id of the current page if directory type = "pages" 
-     * @throws IOException 
+     * @param pageId  Id of the current page if directory type = "pages"
+     * @throws IOException
      */
     public DataHelper(String dataDir, String dirType, String pageId) throws IOException {
         // Adjust path to point to a directory of a specific page
@@ -100,13 +99,13 @@ public class DataHelper {
             if (!fileEntry.isFile())
                 continue;
 
-            String fileName    = fileEntry.getName();
+            String fileName = fileEntry.getName();
             int extensionStart = fileName.indexOf(".");
             // Skip files that do not have any file ending
             if (extensionStart == -1 || extensionStart == 0)
                 continue;
 
-            String lineId = fileName.substring(0 , extensionStart);
+            String lineId = fileName.substring(0, extensionStart);
             if (!data.containsKey(lineId)) {
                 data.put(lineId, new LineData(lineId, dataDir));
             }
@@ -115,17 +114,22 @@ public class DataHelper {
             // Set appropriate line data for each file type
             if (fileName.endsWith(".png")) {
                 lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
-            }
-            else if (fileName.endsWith(".gt.txt")) {
+            } else if (fileName.endsWith(".gt.txt")) {
                 // Escape HTML characters to ensure that text is correctly displayed
             	try (Stream<String> s = Files.lines(fileEntry.toPath())) {
                     lineData.setGt(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
                 }
-            }
-            else if (fileName.endsWith(".txt")) {
+            } else if (fileName.endsWith(".txt")) {
                 // Escape HTML characters to ensure that text is correctly displayed
                 try (Stream<String> s = Files.lines(fileEntry.toPath())) {
                     lineData.setOcr(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
+            	}   
+            } else if (fileName.endsWith(".json")) {
+                // Escape HTML characters to ensure that text is correctly displayed
+                try {
+                    lineData.loadJson(fileEntry);
+                } catch (IOException e) {
+                    //TODO:
                 }
             }
         }
@@ -137,7 +141,7 @@ public class DataHelper {
      * Loads the content of all files in LineData objects
      *
      * @return Content of all files (sorted) in the data directory
-     * @throws IOException 
+     * @throws IOException
      */
     private TreeMap<String, LineData> loadData() throws IOException {
         if (dirType.equals("pages")) {
@@ -156,8 +160,7 @@ public class DataHelper {
                 data.putAll(getDirectoryLineData(segmentDirPath));
             }
             return data;
-        }
-        else
+        } else
             return getDirectoryLineData(dataDir);
     }
 
