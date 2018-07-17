@@ -98,7 +98,7 @@ body {
   font-size: 16px;
   font-style: italic;
 }
-#lineList .has-gtc-text {
+#lineList .has-gt {
   background-color: lightgreen;
 }
 #lineList input[type="text"] {

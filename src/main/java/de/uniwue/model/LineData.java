@@ -23,14 +23,14 @@ public class LineData {
     private String image;
 
     /**
-     * Ground Truth text of the line
+     * OCR text of the line
      */
-    private String groundTruth;
+    private String ocr;
 
     /**
-     * Corrected (manual) Ground Truth of the line
+     * Ground Truth of the line
      */
-    private String groundTruthCorrection;
+    private String gt;
 
     /**
      * Constructor
@@ -97,38 +97,38 @@ public class LineData {
     }
 
     /**
+     * Gets the OCR text of the line
+     *
+     * @return String OCR text
+     */
+    public String getOcr() {
+        return ocr;
+    }
+
+    /**
+     * Sets the OCR text of the line
+     *
+     * @param ocr OCR text
+     */
+    public void setOcr(String ocr) {
+        this.ocr = ocr;
+    }
+
+    /**
      * Gets the Ground Truth text of the line
      *
      * @return String Ground Truth text
      */
-    public String getGroundTruth() {
-        return groundTruth;
+    public String getGt() {
+        return gt;
     }
 
     /**
      * Sets the Ground Truth text of the line
      *
-     * @param groundTruth Ground Truth text
+     * @param gt Ground Truth text
      */
-    public void setGroundTruth(String groundTruth) {
-        this.groundTruth = groundTruth;
-    }
-
-    /**
-     * Gets the manually corrected Ground Truth text of the line
-     *
-     * @return String Corrected Ground Truth text
-     */
-    public String getGroundTruthCorrection() {
-        return groundTruthCorrection;
-    }
-
-    /**
-     * Sets the manually corrected Ground Truth text of the line
-     *
-     * @param groundTruthCorrection Corrected Ground Truth text
-     */
-    public void setGroundTruthCorrection(String groundTruthCorrection) {
-        this.groundTruthCorrection = groundTruthCorrection;
+    public void setGt(String gt) {
+        this.gt = gt;
     }
 }

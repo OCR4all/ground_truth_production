@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.uniwue.helper.DataHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import de.uniwue.helper.GroundTruthDataHelper;
 import de.uniwue.model.LineData;
 
 /**
@@ -27,26 +27,26 @@ public class GroundTruthDataController {
     /**
      * Response to the request to send the content of the project root
      *
-     * @param gtcDir Directory to the necessary ground truth files
-     * @param dirType Type of the ground truth directory (flat | pages)
+     * @param dataDir Directory to the necessary files
+     * @param dirType Type of the data directory (flat | pages)
      * @param pageId Id of the current page if directory type = "pages"
      * @param session Session of the user
      * @return Returns the content of the /groundtruthcorrection page
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView displayGroundTruthCorrectionPage(
-                @RequestParam(value = "gtcDir", required = false) String gtcDir,
+                @RequestParam(value = "dataDir", required = false) String dataDir,
                 @RequestParam(value = "dirType", required = false) String dirType,
                 @RequestParam(value = "pageId", required = false) String pageId,
                 HttpSession session
             ) {
         // Store passed parameters in URL and add them to session
-        if (gtcDir != null && !gtcDir.isEmpty())
-            session.setAttribute("gtcDir", gtcDir);
+        if (dataDir != null && !dataDir.isEmpty())
+            session.setAttribute("dataDir", dataDir);
         if (dirType != null && !dirType.isEmpty())
             session.setAttribute("dirType", dirType);
 
-        ModelAndView mv = new ModelAndView("groundtruthcorrection");
+        ModelAndView mv = new ModelAndView("gtProduction");
         return mv;
     }
 
@@ -54,8 +54,8 @@ public class GroundTruthDataController {
      * Response to the request to send the contents of the given ground truth folder
      * This folder should contain lines that are represented as image and text
      *
-     * @param gtcDir Directory to the necessary ground truth files
-     * @param dirType Type of the ground truth directory (flat | pages)
+     * @param dataDir Directory to the necessary files
+     * @param dirType Type of the data directory (flat | pages)
      * @param pageId Id of the current page if directory type = "pages" 
      * @param session Session of the user
      * @param response Response to the request
@@ -63,21 +63,21 @@ public class GroundTruthDataController {
      */
     @RequestMapping(value = "/ajax/groundtruthdata/load" , method = RequestMethod.GET)
     public @ResponseBody ArrayList<LineData> jsonLoadGroundTruthData(
-                @RequestParam("gtcDir") String gtcDir,
+                @RequestParam("dataDir") String dataDir,
                 @RequestParam("dirType") String dirType,
                 @RequestParam(value = "pageId", required = false) String pageId,
                 HttpSession session, HttpServletResponse response
             ) {
         // Store parameters in session (serve as entry point)
-        session.setAttribute("gtcDir", gtcDir);
+        session.setAttribute("dataDir", dataDir);
         session.setAttribute("dirType", dirType);
 
         try {
-            // Store GroundTruthDataHelper in session after loading
-            GroundTruthDataHelper groundTruthDataHelper = new GroundTruthDataHelper(gtcDir, dirType, pageId);
-            session.setAttribute("groundTruthDataHelper", groundTruthDataHelper);
+            // Store DataHelper in session after loading
+            DataHelper dataHelper = new DataHelper(dataDir, dirType, pageId);
+            session.setAttribute("groundTruthDataHelper", dataHelper);
 
-            return groundTruthDataHelper.getGroundTruthData();
+            return dataHelper.getData();
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
@@ -85,22 +85,22 @@ public class GroundTruthDataController {
     }
 
     /**
-     * Saves the corrected Ground Truth data
+     * Saves the Ground Truth data
      *
-     * @param gtcLineId Ground Truth line Id
-     * @param gtcText Corrected Ground Truth text
+     * @param lineId line Id
+     * @param gtText Corrected Ground Truth text
      * @param session Session of the user
      * @param response Response to the request
      */
     @RequestMapping(value = "/ajax/groundtruthdata/save" , method = RequestMethod.POST)
     public @ResponseBody void jsonSaveGroundTruthData(
-                @RequestParam("gtcLineId") String gtcLineId,
-                @RequestParam("gtcText") String gtcText,
+                @RequestParam("lineId") String lineId,
+                @RequestParam("gtText") String gtText,
                 HttpSession session, HttpServletResponse response
             ) {
         try {
-            GroundTruthDataHelper groundTruthDataHelper = (GroundTruthDataHelper) session.getAttribute("groundTruthDataHelper");
-            groundTruthDataHelper.saveGroundTruthData(gtcLineId, URLDecoder.decode(gtcText, StandardCharsets.UTF_8.toString()));
+            DataHelper dataHelper = (DataHelper) session.getAttribute("dataHelper");
+            dataHelper.saveGroundTruthData(lineId, URLDecoder.decode(gtText, StandardCharsets.UTF_8.toString()));
         } catch (IOException f) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -122,8 +122,8 @@ public class GroundTruthDataController {
                 HttpServletResponse response
             ) {
         try {
-            GroundTruthDataHelper groundTruthDataHelper = (GroundTruthDataHelper) session.getAttribute("groundTruthDataHelper");
-            return groundTruthDataHelper.getPages(pagesDir);
+            DataHelper dataHelper = (DataHelper) session.getAttribute("dataHelper");
+            return dataHelper.getPages(pagesDir);
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;

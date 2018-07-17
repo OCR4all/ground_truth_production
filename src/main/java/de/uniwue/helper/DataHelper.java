@@ -17,23 +17,23 @@ import org.springframework.web.util.HtmlUtils;
 import de.uniwue.model.LineData;
 
 /**
- * Helper class to load Ground Truth data
+ * Helper class to load data
  */
-public class GroundTruthDataHelper {
+public class DataHelper {
     /**
-     * Directory to the necessary ground truth files
+     * Directory to the necessary files
      */
-    private String gtcDir;
+    private String dataDir;
 
     /**
-     * Type of the ground truth directory (flat | pages)
+     * Type of the data directory (flat | pages)
      */
     private String dirType;
 
     /**
-     * Stores the content of all files (sorted) in the gtc directory
+     * Stores the content of all files (sorted) in the data directory
      */
-    private TreeMap<String, LineData> gtData  = new TreeMap<String, LineData>();
+    private TreeMap<String, LineData> data = new TreeMap<String, LineData>();
 
     /**
      * Finds and returns sub-directories of a given directory
@@ -55,47 +55,47 @@ public class GroundTruthDataHelper {
     /**
      * Constructor
      *
-     * @param gtcDir Directory to the necessary ground truth files
-     * @param dirType Type of the ground truth directory (flat | pages)
+     * @param dataDir Directory to the necessary files
+     * @param dirType Type of the data directory (flat | pages)
      * @param pageId Id of the current page if directory type = "pages" 
      * @throws IOException 
      */
-    public GroundTruthDataHelper(String gtcDir, String dirType, String pageId) throws IOException {
+    public DataHelper(String dataDir, String dirType, String pageId) throws IOException {
         // Adjust path to point to a directory of a specific page
         if (dirType.equals("pages")) {
-            File pagesDir = new File(gtcDir);
+            File pagesDir = new File(dataDir);
             if (!pagesDir.exists())
                 throw new IOException();
 
             // If no pageId is set, use first page directory
             if (pageId == null || pageId.equals("null")) {
-                String[] pages = getSubDirectories(gtcDir);
+                String[] pages = getSubDirectories(dataDir);
                 if (pages.length == 0)
                     throw new IOException();
 
                 pageId = pages[0];
             }
 
-            gtcDir += File.separator + pageId;
+            dataDir += File.separator + pageId;
         }
 
         this.dirType = dirType;
-        this.gtcDir  = gtcDir;
+        this.dataDir = dataDir;
     }
 
     /**
-     * Fetches and returns the ground truth data of a given directory as LineData objects
+     * Fetches and returns the data of a given directory as LineData objects
      *
-     * @param dataDir Directory to get ground truth data from
+     * @param dataDir Directory to get line data from
      * @return Content of all files (sorted) in the given directory
      * @throws IOException
      */
-    private TreeMap<String, LineData> getDirectoryGroundTruthData(String dataDir) throws IOException {
+    private TreeMap<String, LineData> getDirectoryLineData(String dataDir) throws IOException {
         final File contentDir = new File(dataDir);
         if (!contentDir.exists() || !contentDir.isDirectory())
             throw new IOException();
 
-        TreeMap<String, LineData> gtData = new TreeMap<String, LineData>();
+        TreeMap<String, LineData> data = new TreeMap<String, LineData>();
         for (final File fileEntry : contentDir.listFiles()) {
             if (!fileEntry.isFile())
                 continue;
@@ -107,83 +107,83 @@ public class GroundTruthDataHelper {
                 continue;
 
             String lineId = fileName.substring(0 , extensionStart);
-            if (!gtData.containsKey(lineId)) {
-                gtData.put(lineId, new LineData(lineId, dataDir));
+            if (!data.containsKey(lineId)) {
+                data.put(lineId, new LineData(lineId, dataDir));
             }
 
-            LineData lineData = gtData.get(lineId);
+            LineData lineData = data.get(lineId);
             // Set appropriate line data for each file type
             if (fileName.endsWith(".png")) {
                 lineData.setImage(Base64.getEncoder().encodeToString(Files.readAllBytes(fileEntry.toPath())));
             }
             else if (fileName.endsWith(".gt.txt")) {
                 // Escape HTML characters to ensure that text is correctly displayed
-                try (Stream<String> s = Files.lines(fileEntry.toPath())) {
-                    lineData.setGroundTruthCorrection(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
+            	try (Stream<String> s = Files.lines(fileEntry.toPath())) {
+                    lineData.setGt(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
                 }
             }
             else if (fileName.endsWith(".txt")) {
                 // Escape HTML characters to ensure that text is correctly displayed
                 try (Stream<String> s = Files.lines(fileEntry.toPath())) {
-                    lineData.setGroundTruth(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
+                    lineData.setOcr(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
                 }
             }
         }
 
-        return gtData;
+        return data;
     }
 
     /**
      * Loads the content of all files in LineData objects
      *
-     * @return Content of all files (sorted) in the gtc directory
+     * @return Content of all files (sorted) in the data directory
      * @throws IOException 
      */
-    private TreeMap<String, LineData> loadGroundTruthData() throws IOException {
+    private TreeMap<String, LineData> loadData() throws IOException {
         if (dirType.equals("pages")) {
-            final File pagesDir = new File(gtcDir);
+            final File pagesDir = new File(dataDir);
             if (!pagesDir.exists() || !pagesDir.isDirectory())
                 throw new IOException();
 
-            TreeMap<String, LineData> gtData = new TreeMap<String, LineData>();
+            TreeMap<String, LineData> data = new TreeMap<String, LineData>();
             // Only scan sub-directories (segments) in case of a page directory
             for (String segmentDirPath : pagesDir.list()) {
-                segmentDirPath = gtcDir + File.separator + segmentDirPath;
+                segmentDirPath = dataDir + File.separator + segmentDirPath;
                 final File segmentDir = new File(segmentDirPath);
                 if (!segmentDir.isDirectory())
                     continue;
 
-                gtData.putAll(getDirectoryGroundTruthData(segmentDirPath));
+                data.putAll(getDirectoryLineData(segmentDirPath));
             }
-            return gtData;
+            return data;
         }
         else
-            return getDirectoryGroundTruthData(gtcDir);
+            return getDirectoryLineData(dataDir);
     }
 
     /**
-     * Gets the content of all files in the gtc directory
+     * Gets the content of all files in the data directory
      * The content is represented by line data objects
      *
      * @return Array that holds all line data
      * @throws IOException
      */
-    public ArrayList<LineData> getGroundTruthData() throws IOException {
-        gtData = loadGroundTruthData();
-        return new ArrayList<LineData>(gtData.values());
+    public ArrayList<LineData> getData() throws IOException {
+        data = loadData();
+        return new ArrayList<LineData>(data.values());
     }
 
     /**
-     * Saves the groundTruthData correction
+     * Saves the ground truth
      *
-     * @param lineId Ground Truth line Id
-     * @param gtcText Corrected Ground Truth text
+     * @param lineId line Id
+     * @param gtText ground truth text
      */
-    public void saveGroundTruthData(String lineId, String gtcText) throws IOException {
-        Path pathToFile = Paths.get(gtData.get(lineId).getDirectory() + File.separator + lineId + ".gt.txt");
+    public void saveGroundTruthData(String lineId, String gtText) throws IOException {
+        Path pathToFile = Paths.get(data.get(lineId).getDirectory() + File.separator + lineId + ".gt.txt");
         BufferedWriter writer = Files.newBufferedWriter(pathToFile);
         // Store unescaped HTML characters to text file for general usage
-        writer.write(HtmlUtils.htmlUnescape(gtcText));
+        writer.write(HtmlUtils.htmlUnescape(gtText));
         writer.close();
     }
 
@@ -191,7 +191,7 @@ public class GroundTruthDataHelper {
      * Returns sub-directories if directory type = "pages"
      *
      * @param pagesDir Pages directory
-     * @return String array containing the pages of the ground truth directory
+     * @return String array containing the pages of the data directory
      * @throws IOException
      */
     public String[] getPages(String pagesDir) throws IOException {
