@@ -25,6 +25,7 @@
     <script type="text/javascript" src="resources/js/gridstack.min.js"></script>
     <!-- Custom JS -->
     <script type="text/javascript" src="resources/js/gtc-virtualkeyboard.js"></script>
+    <script type="text/javascript" src="resources/js/gtp.js"></script>
 
     <jsp:doBody />
 </head>

@@ -75,7 +75,7 @@ public class GroundTruthDataController {
         try {
             // Store DataHelper in session after loading
             DataHelper dataHelper = new DataHelper(dataDir, dirType, pageId);
-            session.setAttribute("groundTruthDataHelper", dataHelper);
+            session.setAttribute("dataHelper", dataHelper);
 
             return dataHelper.getData();
         } catch (IOException e) {
