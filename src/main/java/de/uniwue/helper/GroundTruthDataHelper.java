@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import org.springframework.web.util.HtmlUtils;
 
@@ -117,11 +118,15 @@ public class GroundTruthDataHelper {
             }
             else if (fileName.endsWith(".gt.txt")) {
                 // Escape HTML characters to ensure that text is correctly displayed
-                lineData.setGroundTruthCorrection(HtmlUtils.htmlEscape(Files.lines(fileEntry.toPath()).findFirst().orElse("")));
+                try (Stream<String> s = Files.lines(fileEntry.toPath())) {
+                    lineData.setGroundTruthCorrection(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
+                }
             }
             else if (fileName.endsWith(".txt")) {
                 // Escape HTML characters to ensure that text is correctly displayed
-                lineData.setGroundTruth(HtmlUtils.htmlEscape(Files.lines(fileEntry.toPath()).findFirst().orElse("")));
+                try (Stream<String> s = Files.lines(fileEntry.toPath())) {
+                    lineData.setGroundTruth(HtmlUtils.htmlEscape(s.findFirst().orElse("")));
+                }
             }
         }
 
