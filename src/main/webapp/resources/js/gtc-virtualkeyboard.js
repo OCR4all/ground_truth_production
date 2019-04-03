@@ -126,7 +126,7 @@ $(document).ready(function() {
 
                 // Update and save virtual keyboard
                 var grid = $('.grid-stack').data('gridstack');
-                updateGrid(grid, jsonConf);
+                updateGrid(grid, json);
                 saveVirtualKeyboard(grid, json);
             });
         };
