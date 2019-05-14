@@ -46,9 +46,10 @@ public class GroundTruthDataHelper {
         File parentDir = new File(parentDirPath);
         if (!parentDir.exists())
             throw new IOException();
-
-        String[] subDirs = parentDir.list();
-        Arrays.sort(subDirs);
+        
+        String[] subDirs = Arrays.stream(parentDir.list())
+        		.filter(d -> new File(parentDirPath,d).isDirectory()).sorted()
+        		.toArray(size -> new String[size]);
         return subDirs;
     }
 
