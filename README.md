@@ -20,7 +20,7 @@ This guide uses tomcat8 and Ubuntu (please adjust accordingly for your setup)
 * Clone Repository:
 	`git clone https://github.com/OCR4all/ground_truth_production.git`
 * Compile:
-	`mvn clean install -f ground_truth_production/pom.xml
+	`mvn clean install -f ground_truth_production/pom.xml`
 * Copy or link the created war file to tomcat:
 	* Copy `cp ground_truth_production/target/GTC_Web.war /var/lib/tomcat8/webapps/GTC_Web.war`
 * Start Tomcat:
@@ -28,4 +28,4 @@ This guide uses tomcat8 and Ubuntu (please adjust accordingly for your setup)
 	* (Restart Tomcat via `systemctl restart tomcat8`)
 	* (To start Tomcat automatically at system boot `systemctl enable tomcat8`)
  
-      
+In some cases you need to adjust the read/write permissions for your data folders.      
